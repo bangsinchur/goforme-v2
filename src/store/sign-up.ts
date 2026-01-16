@@ -57,7 +57,7 @@ export const useMakerProfileDataStore = () => {
   return makerProfileData;
 };
 
-export const useSignUp = () => {
+export const useSignUpAllDataStore = () => {
   const store = useSignUpStore();
   return store;
 };

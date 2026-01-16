@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import logo from "@/assets/logo_img2.png";
+import logo from "@/assets/icon_logo_img3.jpg";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { signUpSchema, type SignUpFormData } from "@/lib/validate";
@@ -15,31 +15,111 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSignUp } from "@/store/sign-up";
+import { useSignUpAllDataStore } from "@/store/sign-up";
+import DreamerProfile from "@/components/profile/dreamer-profile";
+import MakerProfile from "@/components/profile/maker-profile";
+import { useImageSelectModal } from "@/store/image-select-modal";
+import { useSetSelectedLocation } from "@/store/trip-plan-select";
+import { useSignUp } from "@/hooks/mutations/use-sign-up";
+import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 export default function SignUpPage() {
-  const { setUserData } = useSignUp();
+  const {
+    userData,
+    profileData,
+    makerProfileData,
+    setUserData,
+    setProfileData,
+    setMakerProfileData,
+  } = useSignUpAllDataStore();
+  const { selectedImage } = useImageSelectModal();
+  const { selectedLocation, selectedService } = useSetSelectedLocation();
+
+  const { mutate: signUpMutation, isPending: isSignUpPending } = useSignUp();
 
   const {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   });
 
+  // const router = useRouter();
+
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("데이터:", data);
-    setUserData({
+    const userPayload = {
       role: data.role,
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
       nickName: data.nickName,
       phoneNumber: data.phoneNumber,
-    });
+    };
+
+    setUserData(userPayload);
+
+    if (data.role === "DREAMER") {
+      const profilePayload = {
+        image: selectedImage ?? "",
+        tripTypes: selectedLocation,
+        serviceArea: selectedService,
+      };
+
+      setProfileData(profilePayload);
+      const payload = { user: userPayload, profile: profilePayload };
+
+      console.log("SignUp payload:", payload);
+
+      // signUpMutation(
+      //   { user: userPayload, profile: profilePayload },
+      //   {
+      //     onSuccess: () => {
+      //       toast.success("회원가입이 완료되었습니다.", {
+      //         position: "top-center",
+      //       });
+      //       router.push("/login");
+      //     },
+      //     onError: (error) => {
+      //       toast.error(`${error.message}-회원가입에 실패했습니다.`, {
+      //         position: "top-center",
+      //       });
+      //     },
+      //   }
+      // );
+    } else if (data.role === "MAKER") {
+      const makerPayload = {
+        image: selectedImage ?? "",
+        serviceTypes: selectedService,
+        serviceArea: selectedLocation,
+        gallery: "",
+        description: "",
+        detailDescription: "",
+      };
+
+      setMakerProfileData(makerPayload);
+      signUpMutation(
+        { user: userPayload, makerProfileData: makerPayload },
+        {
+          onSuccess: () => {
+            toast.success("회원가입이 완료되었습니다.", {
+              position: "top-center",
+            });
+            // router.push("/login");
+          },
+          onError: (error) => {
+            toast.error(`${error.message}-회원가입에 실패했습니다.`, {
+              position: "top-center",
+            });
+          },
+        }
+      );
+    }
   };
+  const roleSelected = watch("role");
 
   return (
     <>
@@ -51,7 +131,13 @@ export default function SignUpPage() {
           className="flex items-center gap-2  rounded-2xl pl-1 pr-3 py-1"
           href="/"
         >
-          <Image src={logo} alt="logo" className="h-20 w-30 rounded-2xl" />
+          <Image
+            width={80}
+            height={80}
+            src={logo}
+            alt="logo"
+            className="rounded-2xl"
+          />
           <div className="flex flex-col gap-2 text-4xl font-bold ">
             <p>GoForMe</p>
             <p className="text-base text-muted-foreground">여행 중개 플랫폼</p>
@@ -60,12 +146,15 @@ export default function SignUpPage() {
 
         <div className="text-2xl font-bold">회원가입</div>
         <div className="flex flex-col w-full max-w-160 gap-3">
-          <Input
-            className="py-5"
-            type="email"
-            placeholder="이메일(abc@example.com)"
-            {...register("email")}
-          />
+          <div className="flex items-center gap-2">
+            <Input
+              className="py-5"
+              type="email"
+              placeholder="이메일(abc@example.com)"
+              {...register("email")}
+            />
+            <Button>이메일 확인</Button>
+          </div>
           <div className="flex items-center gap-2">
             <Input
               className="py-5"
@@ -96,7 +185,10 @@ export default function SignUpPage() {
               name="role"
               control={control}
               render={({ field }) => (
-                <Select {...field}>
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
                   <SelectTrigger className="py-5">
                     <SelectValue placeholder="여행자 선택(필수)" />
                   </SelectTrigger>
@@ -108,6 +200,8 @@ export default function SignUpPage() {
               )}
             />
           </div>
+          {roleSelected === "DREAMER" && <DreamerProfile />}
+          {roleSelected === "MAKER" && <MakerProfile />}
           <Button className="py-5" type="submit">
             회원가입
           </Button>
