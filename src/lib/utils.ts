@@ -63,3 +63,16 @@ export const planData: Data = {
     { label: "제주", value: "JEJU" },
   ],
 };
+
+
+const ACCESS_TOKEN_KEY = "accessToken";
+
+export const setAccessToken = (token: string) => {
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  }
+};
+export const getAccessToken = () => {
+  if (typeof window === "undefined") return "";
+  return window.localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";
+};

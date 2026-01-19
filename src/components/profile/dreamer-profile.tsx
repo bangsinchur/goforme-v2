@@ -16,13 +16,14 @@ export default function DreamerProfile() {
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-xl font-bold mt-1">프로필 등록</p>
+      <p className="text-xl font-bold mt-1">DREAMER 프로필 등록</p>
       <div className="flex gap-5 justify-between">
         <div
           className="flex flex-col items-center gap-2 cursor-pointer"
           onClick={openImageSelectModal}
         >
           <Image
+          className="border-3"
             src={selectedAvatar?.src || defaultProfileImage}
             width={100}
             height={100}
@@ -33,7 +34,6 @@ export default function DreamerProfile() {
           </span>
         </div>
         <div className="flex flex-col gap-2">
-          {/* <div className="font-extrabold">여행하고 싶은 지역</div> */}
           <Location />
         </div>
       </div>
