@@ -9,16 +9,13 @@ export const signUp = async (data: any) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-    const payload = await res.json()
-    if (!res.ok) {
-      throw new Error(payload?.message ?? '회원가입에 실패했습니다.')
-    }
-    return payload
+      if(!res.ok){
+        throw new Error(res.statusText)}
   } catch (error: any) {
     if (error.response && error.response.status === 400) {
       throw new Error('이미 존재하는 사용자 입니다.')
     }
-    throw new Error('회원가입에 실패했습니다.', error.message)
+console.error(error)
   }
 }
 
@@ -38,7 +35,7 @@ export const checkNickName = async (data: { nickName: string }) => {
     if (error.response && error.response.status === 500) {
       throw new Error('닉네임이 존재하지 않습니다.')
     }
-    throw new Error('닉네임 중복 체크에 실패했습니다.', error.message)
+    
   }
 }
 
@@ -58,7 +55,7 @@ export const checkEmail = async (data: { email: string }) => {
     if (error.response && error.response.status === 500) {
       throw new Error('이메일이 존재하지 않습니다.')
     }
-    throw new Error('이메일 중복 체크에 실패했습니다.', error.message)
+  
   }
 }
 
@@ -80,7 +77,7 @@ export const login = async (data: { email: string; password: string }) => {
     if (error.response && error.response.status === 400) {
       throw new Error('이메일 또는 비밀번호가 등록된 정보와 일치하지 않습니다.')
     }
-    throw new Error('로그인중 오류가 발생했습니다.', error.message)
+   
   }
 }
 
@@ -103,6 +100,6 @@ export const refreshToken = async () => {
     if (error.response && error.response.status === 401) {
       throw new Error('토큰 갱신에 실패했습니다.')
     }
-    throw new Error('토큰 갱신중 오류가 발생했습니다.', error.message)
+   
   }
 }

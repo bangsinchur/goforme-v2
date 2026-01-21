@@ -13,18 +13,19 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const { mutate: loginMutation, isPending: isLoginPending } = useLogin();
-  const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
+  const router = useRouter()
   const onSubmit = (data: LoginFormData) => {
     loginMutation(data, {
       onSuccess: () => {
         toast.success("로그인 성공", {
           position: "top-center",
         });
-        router.push("/");
+
+        router.replace("/")
       },
       onError: (error) => {
         toast.error(error.message, {
@@ -46,7 +47,9 @@ export default function LoginPage() {
         </Link>
         <div className="text-2xl font-bold">로그인</div>
         <Input className="py-5" type="email" placeholder="이메일" {...register("email")} />
+        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         <Input className="py-5" type="password" placeholder="비밀번호" {...register("password")} />
+        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         <Button onClick={handleSubmit(onSubmit)} className="py-5 w-full" type="submit">로그인</Button>
         <div className="text-sm text-center flex gap-2">
           계정이 없으시다면?

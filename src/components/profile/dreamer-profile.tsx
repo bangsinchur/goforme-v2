@@ -34,7 +34,7 @@ export default function DreamerProfile() {
           </span>
         </div>
         <div className="flex flex-col gap-2">
-          <Location />
+          <Location type="DREAMER" />
         </div>
       </div>
     </div>

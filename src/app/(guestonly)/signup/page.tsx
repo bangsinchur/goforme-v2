@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import DreamerProfile from '@/components/profile/dreamer-profile'
 import MakerProfile from '@/components/profile/maker-profile'
 import { useImageSelectModal } from '@/store/image-select-modal'
-import { useSetSelectedLocation } from '@/store/trip-plan-select'
+import { useTripPlanSelect } from '@/store/trip-plan-select'
 import { useCheckEmail, useCheckNickName, useSignUp } from '@/hooks/mutations/use-sign-up'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
@@ -20,7 +20,7 @@ import RoleSelector from '@/components/ui/role-selector'
 
 export default function SignUpPage() {
   const { selectedImage } = useImageSelectModal()
-  const { selectedLocation, selectedService } = useSetSelectedLocation()
+  const { selectedLocation, selectedService, gallery, description, detailDescription } = useTripPlanSelect()
 
   const { mutate: signUpMutation, isPending: isSignUpPending } = useSignUp()
   const { mutate: checkNickNameMutation, isPending: isCheckNickNamePending } = useCheckNickName()
@@ -28,7 +28,6 @@ export default function SignUpPage() {
 
   const {
     register,
-    trigger,
     handleSubmit,
     control,
     watch,
@@ -82,6 +81,7 @@ export default function SignUpPage() {
             router.push('/login')
           },
           onError: (error) => {
+            console.log(error)
             toast.error(`${error.message}-회원가입에 실패했습니다.`, {
               position: 'top-center',
             })
@@ -93,13 +93,14 @@ export default function SignUpPage() {
         image: selectedImage ?? '',
         serviceTypes: selectedService,
         serviceArea: selectedLocation,
-        gallery: '',
-        description: '',
-        detailDescription: '',
+        gallery: gallery,
+        description: description,
+        detailDescription: detailDescription,
       }
 
+
       signUpMutation(
-        { user: userPayload, makerProfileData: makerPayload },
+        { user: userPayload, profile: makerPayload },
         {
           onSuccess: () => {
             toast.success('회원가입이 완료되었습니다.', {

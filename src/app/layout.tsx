@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import GlobalNavbarLayout from "@/components/Gnb/global-layout";
 import ModalProvider from "@/provider/modal-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "@/provider/react-query-provider";
+import SessionProvider from "@/provider/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,12 +34,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <ModalProvider>
-            <GlobalNavbarLayout>
-              {children}
-              <Toaster />
-            </GlobalNavbarLayout>
-          </ModalProvider>
+          <SessionProvider>
+            <ModalProvider>
+              <GlobalNavbarLayout>
+                {children}
+                <Toaster />
+              </GlobalNavbarLayout>
+            </ModalProvider>
+          </SessionProvider>
         </ReactQueryProvider>
         <div id="modal-root"></div>
       </body>
