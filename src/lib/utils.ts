@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { ServiceArea } from "@/types";
 
 import DEFAULT_1 from "@/assets/img_avatar1.svg";
 import DEFAULT_2 from "@/assets/img_avatar2.svg";
@@ -75,4 +76,28 @@ export const setAccessToken = (token: string) => {
 export const getAccessToken = () => {
   if (typeof window === "undefined") return "";
   return window.localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";
+};
+
+export const convertRegionToKorean = (region: ServiceArea): string => {
+  const regionMap: Record<ServiceArea, string> = {
+    SEOUL: "서울",
+    BUSAN: "부산",
+    INCHEON: "인천",
+    DAEGU: "대구",
+    DAEJEON: "대전",
+    GWANGJU: "광주",
+    ULSAN: "울산",
+    SEJONG: "세종",
+    GYEONGGI: "경기",
+    GANGWON: "강원",
+    CHUNGBUK: "충북",
+    CHUNGNAM: "충남",
+    JEONBUK: "전북",
+    JEONNAM: "전남",
+    GYEONGBUK: "경북",
+    GYEONGNAM: "경남",
+    JEJU: "제주",
+  };
+
+  return regionMap[region];
 };

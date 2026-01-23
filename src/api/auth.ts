@@ -1,6 +1,6 @@
 import { setAccessToken } from '@/lib/utils'
+import { API } from '@/lib/constants'
 
-const API = process.env.NEXT_PUBLIC_API_URL
 
 export const signUp = async (data: any) => {
   try {

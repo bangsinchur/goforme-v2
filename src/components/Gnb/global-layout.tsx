@@ -26,7 +26,7 @@ export default function GlobalNavbarLayout({
           </div>
         </div>
       </header>
-      <main className="flex-1 m-auto mt-10  w-full px-4 py-6">{children}</main>
+      <main className="flex-1 m-auto max-w-225 border-x mt-10 w-full px-4 py-6">{children}</main>
       <footer className="border-t py-5 text-muted-foreground text-center">
         @Developer B.GEN
       </footer>
