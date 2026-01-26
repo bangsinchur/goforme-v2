@@ -2,22 +2,6 @@ import { setAccessToken } from '@/lib/utils'
 import { API } from '@/lib/constants'
 
 
-export const signUp = async (data: any) => {
-  try {
-    const res = await fetch(`${API}/auth/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-      if(!res.ok){
-        throw new Error(res.statusText)}
-  } catch (error: any) {
-    if (error.response && error.response.status === 400) {
-      throw new Error('이미 존재하는 사용자 입니다.')
-    }
-console.error(error)
-  }
-}
 
 export const checkNickName = async (data: { nickName: string }) => {
   try {
@@ -35,7 +19,7 @@ export const checkNickName = async (data: { nickName: string }) => {
     if (error.response && error.response.status === 500) {
       throw new Error('닉네임이 존재하지 않습니다.')
     }
-    
+    throw error
   }
 }
 
@@ -55,7 +39,7 @@ export const checkEmail = async (data: { email: string }) => {
     if (error.response && error.response.status === 500) {
       throw new Error('이메일이 존재하지 않습니다.')
     }
-  
+    throw error
   }
 }
 
@@ -77,7 +61,7 @@ export const login = async (data: { email: string; password: string }) => {
     if (error.response && error.response.status === 400) {
       throw new Error('이메일 또는 비밀번호가 등록된 정보와 일치하지 않습니다.')
     }
-   
+    throw error
   }
 }
 
@@ -100,6 +84,7 @@ export const refreshToken = async () => {
     if (error.response && error.response.status === 401) {
       throw new Error('토큰 갱신에 실패했습니다.')
     }
-   
+    // 다른 에러도 다시 throw
+    throw error
   }
 }

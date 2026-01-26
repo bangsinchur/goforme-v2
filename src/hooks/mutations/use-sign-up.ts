@@ -1,10 +1,11 @@
-import { checkEmail, checkNickName, signUp } from "@/api/auth";
+import { checkEmail, checkNickName } from "@/api/auth";
+import { signUpAction } from "@/app/actions/auth-actions"
 import { useMutation } from "@tanstack/react-query";
 import { UseMutationCallback } from "@/types";
 
 export function useSignUp(callbacks?: UseMutationCallback) {
   return useMutation({
-    mutationFn: signUp,
+    mutationFn: signUpAction,
     onSuccess: () => {
       if (callbacks?.onSuccess) {
         callbacks.onSuccess();

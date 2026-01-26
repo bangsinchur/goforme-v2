@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { BaseSyntheticEvent, useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import logo from '@/assets/icon_logo_img3.jpg'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { signUpSchema, type SignUpFormData } from '@/lib/validate'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import DreamerProfile from '@/components/profile/dreamer-profile'
 import MakerProfile from '@/components/profile/maker-profile'
@@ -67,8 +67,8 @@ export default function SignUpPage() {
     if (data.role === 'DREAMER') {
       const profilePayload = {
         image: selectedImage ?? '',
-        tripTypes: selectedLocation,
-        serviceArea: selectedService,
+        tripTypes: selectedService,
+        serviceArea: selectedLocation,
       }
 
       signUpMutation(
@@ -201,6 +201,7 @@ export default function SignUpPage() {
         <div className="flex flex-col w-full max-w-160 gap-3">
           <div className="flex items-center gap-2">
             <Input
+              required
               className="py-5"
               type="email"
               placeholder="이메일(abc@example.com)"
@@ -219,6 +220,7 @@ export default function SignUpPage() {
           </div>
           {errors.nickName && <p className="text-red-500">{errors.nickName.message}</p>}
           <Input
+            required
             className="py-5"
             placeholder="비밀번호"
             type="password"
@@ -226,6 +228,7 @@ export default function SignUpPage() {
           />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
           <Input
+            required
             className="py-5"
             placeholder="비밀번호 확인"
             type="password"

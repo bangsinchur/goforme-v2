@@ -1,5 +1,5 @@
 import { API } from '@/lib/constants'
-import { getAccessToken } from '@/lib/utils'
+import fetchWithAuth from '@/lib/fetch-with-auth'
 import { RequestParams } from '@/types'
 
 function buildQueryString({isAssigned,tripType,keyword,orderBy,page,pageSize,id}:RequestParams) {
@@ -20,21 +20,16 @@ export default async function getPlanPosts({isAssigned,tripType,keyword,orderBy,
     try{
         const queryString = buildQueryString({isAssigned,tripType,keyword,orderBy,page,pageSize,id});
         
-        const accessToken = getAccessToken()
-        const headers = new Headers()
-        if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`)
-        }
-
-        const res = await fetch(`${API}/plans/maker${queryString}`, {
-            headers,
+        return await fetchWithAuth(`${API}/plans/maker${queryString}`, {
             credentials: 'include',
         });
-        if(!res.ok){
-            throw new Error(res.statusText);
-        }
-        return res.json();
-    }catch(error){
+
         
+    }catch(error:any){
+     if(error.response?.status ===  403){
+        throw new Error('해당 Maker의 아이디가 잘못되었습니다.');
+     }
+     console.error(error)
+     throw error;
     }
 }
