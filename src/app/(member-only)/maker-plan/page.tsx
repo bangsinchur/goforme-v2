@@ -6,13 +6,11 @@ import { useEffect } from "react";
 import useInfinityMakerPlanData from "@/hooks/queries/use-infinity-maker-plan-data";
 import Fallback from "@/components/ui/fallback";
 import Loader from "@/components/ui/loader";
-import { PlanResponse } from "@/types";
 
 
 export default function MakerPlanPage() {
     const { data, error, isPending, fetchNextPage } = useInfinityMakerPlanData();
     const { ref, inView } = useInView();
-
     useEffect(() => {
         if (inView) fetchNextPage();
 
@@ -20,15 +18,14 @@ export default function MakerPlanPage() {
 
     if (error) return <Fallback error={error} />;
     if (isPending) return <Loader />;
-
-
-    const allPlanItems = data.pages.flatMap((page: PlanResponse) => page.list);
+    
+    const allPlanItems = data.pages.flatMap((page: string[]) => page);
 
     return (
         <div className="flex flex-col gap-5">
             <div className="text-background text-lg font-bold mt-5 bg-foreground rounded-md p-1 w-fit">모든 여행 목록</div>
             <div>
-                {allPlanItems.map((planPost) => <MakerPlanItem key={planPost.id} {...planPost} />)}
+                {allPlanItems.map((id: string) => <MakerPlanItem key={id} id={id} />)}
             </div>
             <div ref={ref}>
             </div>

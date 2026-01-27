@@ -1,12 +1,14 @@
 import { QUERY_KEYS } from "@/lib/constants";
 import getPlanPosts from "@/api/plan-post";
-import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { RequestParams, PlanResponse } from "@/types";
+import { keepPreviousData, useInfiniteQuery,useQueryClient } from "@tanstack/react-query";
+import { RequestParams, PlanResponse, PlanItem } from "@/types";
 
 const PAGE_SIZE = 5;
 
 export default function useInfinityMakerPlanData({isAssigned,tripType,keyword,orderBy,pageSize,id}:RequestParams={}) {
-    return useInfiniteQuery<PlanResponse>({
+    const queryClient = useQueryClient();
+    
+    return useInfiniteQuery<string[]>({
         queryKey: QUERY_KEYS.makerPlan.list,
         initialPageParam: 1,
         queryFn: async ({ pageParam = 1 }) => {
@@ -20,11 +22,16 @@ export default function useInfinityMakerPlanData({isAssigned,tripType,keyword,or
                 pageSize: PAGE_SIZE,
                 id
             });
-            return planPosts;
+       
+            planPosts.list.forEach((planPost:PlanItem)=>{
+                queryClient.setQueryData(QUERY_KEYS.makerPlan.byId(planPost.id), planPost);
+            })
+
+            return planPosts.list.map((planPost:PlanItem)=>planPost.id);
         },
         
         getNextPageParam: (lastPage, allPages) => {
-            if (lastPage.list.length < PAGE_SIZE) {
+            if (lastPage.length < PAGE_SIZE) {
                 return undefined;
             }
             return allPages.length + 1;

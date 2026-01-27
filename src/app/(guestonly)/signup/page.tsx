@@ -11,7 +11,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import DreamerProfile from '@/components/profile/dreamer-profile'
 import MakerProfile from '@/components/profile/maker-profile'
-import { useImageSelectModal } from '@/store/image-select-modal'
+import { useEditorModal } from '@/store/editor-modal'
 import { useTripPlanSelect } from '@/store/trip-plan-select'
 import { useCheckEmail, useCheckNickName, useSignUp } from '@/hooks/mutations/use-sign-up'
 import { toast } from 'sonner'
@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation'
 import RoleSelector from '@/components/ui/role-selector'
 
 export default function SignUpPage() {
-  const { selectedImage } = useImageSelectModal()
+  const { selectedImage } = useEditorModal()
   const { selectedLocation, selectedService, gallery, description, detailDescription } = useTripPlanSelect()
 
   const { mutate: signUpMutation, isPending: isSignUpPending } = useSignUp()

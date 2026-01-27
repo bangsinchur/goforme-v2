@@ -77,3 +77,11 @@ export interface RequestParams {
   pageSize?: number;
   id?: string;
 }
+
+export type EstimateVariables = {
+  planId: string;
+  quoteData: {
+      price: number;
+      content: string;
+  };
+};

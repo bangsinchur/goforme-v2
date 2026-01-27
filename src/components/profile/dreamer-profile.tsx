@@ -4,15 +4,19 @@ import Image from "next/image";
 import defaultProfileImage from "@/assets/icon_default_profile.svg";
 import { avatarImages } from "@/lib/utils";
 import {
-  useImageSelectModal,
-  useOpenImageSelectModal,
-} from "@/store/image-select-modal";
+  useEditorModal,
+  useOpenEditorModal,
+} from "@/store/editor-modal";
 import Location from "../ui/trip-plan";
 
 export default function DreamerProfile() {
-  const openImageSelectModal = useOpenImageSelectModal();
-  const { selectedImage } = useImageSelectModal();
+  const openImageSelectModal = useOpenEditorModal();
+  const { selectedImage } = useEditorModal();
   const selectedAvatar = avatarImages.find((image) => image.key === selectedImage);
+  
+  const handleOpenModal = () => {
+    openImageSelectModal('IMAGE_SELECT');
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -20,10 +24,10 @@ export default function DreamerProfile() {
       <div className="flex gap-5 justify-between">
         <div
           className="flex flex-col items-center gap-2 cursor-pointer"
-          onClick={openImageSelectModal}
+          onClick={handleOpenModal}
         >
           <Image
-          className="border-3"
+            className="border-3"
             src={selectedAvatar?.src || defaultProfileImage}
             width={100}
             height={100}
