@@ -1,19 +1,33 @@
-'use client'
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useSession } from "@/store/session";
 import { useEffect } from "react";
-export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-    const session = useSession();
-    const router = useRouter()
+import GlobalLoader from "@/components/ui/global-loader";
 
-    useEffect(() => {
-        if (session) {
-            router.replace("/")
-        }
-    }, [session, router])
+export default function GuestOnlyLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = useSession();
+  const router = useRouter();
 
-    if (session) return null
+  useEffect(() => {
+    if (session) {
+      const role = session.user?.role;
 
-    return <>{children}</>;
+      if (role === "DREAMER") {
+        router.replace("/dreamer-plan");
+      } else if (role === "MAKER") {
+        router.replace("/maker-plan");
+      } else {
+        router.replace("/");
+      }
+    }
+  }, [session, router]);
+
+  if (session) return <GlobalLoader />;
+
+  return <>{children}</>;
 }

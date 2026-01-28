@@ -44,17 +44,17 @@ export default function EstimateModal() {
     <EditorModal title="여행 견적 보내기">
       <div className="flex flex-col gap-4">
         <div className="font-bold">견적금액을 입력해주세요.</div>
-        <Input 
-          type="number" 
-          placeholder="견적금액(원)" 
-          className="w-full" 
+        <Input
+          type="number"
+          placeholder="견적금액(원)"
+          className="w-full"
           value={price || ""}
           onChange={(e) => setPrice(Number(e.target.value))}
         />
         <div className="font-bold">견적 상세 내용</div>
-        <Textarea 
-          placeholder="견적 상세 내용" 
-          className="w-full h-40" 
+        <Textarea
+          placeholder="견적 상세 내용"
+          className="w-full h-40"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />

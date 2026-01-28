@@ -12,13 +12,10 @@ export interface User {
   coconut: number;
 }
 
-// 여행 타입
 type TripType = "CULTURE" | "SHOPPING" | "FESTIVAL" | "ACTIVITY" | "FOOD_TOUR";
 
-// 여행 상태
 export type PlanStatus = "CONFIRMED" | "PENDING" | "COMPLETED";
 
-// 서비스 지역
 export type ServiceArea =
   | "SEOUL"
   | "BUSAN"
@@ -38,13 +35,11 @@ export type ServiceArea =
   | "GYEONGNAM"
   | "JEJU";
 
-// 그룹별 카운트 타입
 interface GroupCount {
   tripType: TripType;
   count: number;
 }
 
-// 플랜 아이템 타입
 export interface PlanItem {
   id: string;
   createdAt: string;
@@ -59,7 +54,7 @@ export interface PlanItem {
   dreamer: User;
 }
 
-// 전체 응답 타입
+
 export interface PlanResponse {
   totalCount: number;
   groupByCount: GroupCount[];
@@ -85,3 +80,36 @@ export type EstimateVariables = {
       content: string;
   };
 };
+
+export interface UserProfile {
+  userId: string;
+  id?: string;
+  nickName?: string;
+  image: string;
+  serviceArea: string[];
+  averageRating?: number;
+  totalReviews?: number;
+  totalConfirms?: number;
+  tripTypes?: string[];
+  serviceTypes?: string[];
+  gallery?: string;
+  description?: string;
+  detailDescription?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MakerProfileResponse {
+  nickName: string;
+  image: string;
+  gallery: string;
+  serviceTypes: string[];
+  serviceArea: string[];
+  description: string;
+  detailDescription: string;
+  isFollowed: boolean;
+  averageRating: number;
+  totalReviews: number;
+  totalFollows: number;
+  totalConfirms: number;
+}
