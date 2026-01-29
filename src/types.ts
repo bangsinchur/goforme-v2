@@ -40,22 +40,7 @@ interface GroupCount {
   count: number;
 }
 
-export interface PlanItem {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  title: string;
-  tripDate: string;
-  tripType: TripType;
-  serviceArea: ServiceArea;
-  details: string;
-  status: PlanStatus;
-  assignees: User[];
-  dreamer: User;
-}
-
-
-export interface PlanResponse {
+export interface MakerPlanResponse {
   totalCount: number;
   groupByCount: GroupCount[];
   list: PlanItem[];
@@ -76,8 +61,8 @@ export interface RequestParams {
 export type EstimateVariables = {
   planId: string;
   quoteData: {
-      price: number;
-      content: string;
+    price: number;
+    content: string;
   };
 };
 
@@ -112,4 +97,91 @@ export interface MakerProfileResponse {
   totalReviews: number;
   totalFollows: number;
   totalConfirms: number;
+}
+
+export interface quoteInfo {
+  id: string;
+  price: number;
+  maker: {
+    id: string;
+    nickName: string;
+    image: string;
+  };
+}
+
+export interface PlanItem {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  tripDate: string;
+  tripType: TripType;
+  serviceArea: ServiceArea;
+  details: string;
+  status: PlanStatus;
+  assignees: User[];
+  dreamer: User;
+}
+
+export type DreamerPlan = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  tripDate: string;
+  tripType: any;
+  serviceArea: ServiceArea;
+  details: string;
+  address?: string;
+  status: string;
+  assignees: [];
+  dreamer: {
+    id: string;
+    nickName: string;
+  };
+  quotes?: quoteInfo[];
+};
+
+export interface DreamerPlanResponse {
+  totalCount: number;
+  list: DreamerPlan[];
+}
+
+export type DreamerPlanRequestParams = {
+  status?: string[];
+  page?: number;
+  pageSize?: number;
+};
+
+interface MakerInfo {
+  nickName: string;
+  image: string;
+  gallery: string;
+  serviceTypes: string[];
+  isFollowed: boolean;
+  averageRating: number;
+  totalReviews: number;
+  totalFollows: number;
+  totalConfirms: number;
+}
+export interface QuotationDetail {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  price: number;
+  content: string;
+  maker: MakerInfo;
+  isConfirmed: false;
+  isAssigned: false;
+}
+
+export interface QuotationResponse {
+  totalCount: number;
+  list: QuotationDetail[];
+}
+
+export interface QuotationParams {
+  planId?: string;
+  page?: number;
+  pageSize?: number;
 }

@@ -3,11 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { PlanItem } from "@/types";
 import { fetchPlanPostById } from "@/api/plan-post";
 
-export function usePlanPostByIdData(id:string) {
-    
-    return useQuery<PlanItem>({
-        queryKey: QUERY_KEYS.makerPlan.byId(id),
-        queryFn: () => fetchPlanPostById(id),
-        enabled: false,
-    });
+export function usePlanPostByIdData(id: string) {
+  return useQuery<PlanItem>({
+    queryKey: QUERY_KEYS.plan.byId(id),
+    queryFn: () => fetchPlanPostById(id),
+    enabled: false, // id가 있을 때만 실행
+  });
 }

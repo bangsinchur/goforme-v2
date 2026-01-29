@@ -114,5 +114,6 @@ export const useSessionActions = () => {
 // 사용자 정보(userId, role)에 쉽게 접근하기 위한 훅
 export const useUser = () => {
   const session = useSessionStore((state) => state.session);
-  return session?.user || null;
+  const user = session?.user;
+  return {user, userId: user?.userId, role: user?.role};
 };

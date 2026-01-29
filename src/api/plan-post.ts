@@ -1,29 +1,21 @@
 import { API } from "@/lib/constants";
 import fetchWithAuth from "@/lib/fetch-with-auth";
-import { EstimateVariables, RequestParams } from "@/types";
+import {
+  DreamerPlanRequestParams,
+  DreamerPlanResponse,
+  EstimateVariables,
+  MakerPlanResponse,
+  QuotationParams,
+  QuotationResponse,
+  RequestParams,
+} from "@/types";
+import {
+  buildDreamerPlanQueryString,
+  buildMakerPlanQueryString,
+  buildQuotationQueryString,
+} from "@/lib/query-builder";
 
-function buildQueryString({
-  isAssigned = false,
-  tripType,
-  keyword,
-  orderBy,
-  page,
-  pageSize,
-  id,
-}: RequestParams) {
-  const params = [] as string[];
-  if (isAssigned) params.push(`isAssigned=${isAssigned}`);
-  if (tripType) params.push(`tripType=${tripType.join(",")}`);
-  if (keyword) params.push(`keyword=${encodeURIComponent(keyword)}`);
-  if (orderBy) params.push(`orderBy=${orderBy}`);
-  if (page) params.push(`page=${page}`);
-  if (pageSize) params.push(`pageSize=${pageSize}`);
-  if (id) params.push(`id=${id}`);
-
-  return params.length > 0 ? `?${params.join("&")}` : "";
-}
-
-export default async function getPlanPosts({
+export async function getMakerPlanPosts({
   isAssigned,
   tripType,
   keyword,
@@ -31,9 +23,9 @@ export default async function getPlanPosts({
   page,
   pageSize,
   id,
-}: RequestParams) {
+}: RequestParams): Promise<MakerPlanResponse> {
   try {
-    const queryString = buildQueryString({
+    const queryString = buildMakerPlanQueryString({
       isAssigned,
       tripType,
       keyword,
@@ -57,15 +49,11 @@ export default async function getPlanPosts({
 
 export async function fetchPlanPostById(id: string) {
   try {
-    const response = await fetchWithAuth(`${API}/plans/${id}`, {
+    return await fetchWithAuth(`${API}/plans/${id}`, {
       credentials: "include",
     });
-    if (!response.ok) {
-      throw new Error("여행 정보를 불러오는데 실패했습니다.");
-    }
-    return response.json();
   } catch (error) {
-    console.error(error);
+    console.error("여행 정보를 불러오는데 실패했습니다:", error);
     throw error;
   }
 }
@@ -93,6 +81,34 @@ export async function fetchSendEstimate({
       throw new Error("잘못된 접근 입니다.");
     }
 
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getDreamerPlanPosts({
+  status,
+  page = 1,
+  pageSize = 5,
+}: DreamerPlanRequestParams): Promise<DreamerPlanResponse> {
+  try {
+    const queryString = buildDreamerPlanQueryString({ status, page, pageSize });
+    return await fetchWithAuth(`${API}/plans/dreamer${queryString}`, {
+      credentials: "include",
+    });
+  } catch (error: any) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getQuotationsByPlanId({planId, page = 1, pageSize = 5}: QuotationParams): Promise<QuotationResponse> {
+  try {
+    const queryString = buildQuotationQueryString({planId, page, pageSize});
+    return await fetchWithAuth(`${API}/plans/${planId}/quotes${queryString}`, {
+      credentials: "include",
+    });
+  } catch (error: any) {
     console.error(error);
     throw error;
   }
