@@ -27,7 +27,7 @@ export default function DreamerPlanPost() {
   const allPlanItems = planPosts.pages.flatMap((page: string[]) => page);
   return (
     <div>
-      <div className="font-bold mb-5 text-lg">✈️내가 요청한 여행 목록📅</div>
+      <div className="font-bold m-5 text-lg">✈️내가 요청한 여행 목록📅</div>
       <div className="flex flex-col gap-3">
         {allPlanItems.map((id: string) => (
           <PlanPostItem key={id} id={id} />

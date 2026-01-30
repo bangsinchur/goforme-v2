@@ -1,4 +1,8 @@
-import type { DreamerPlanRequestParams, QuotationParams, RequestParams } from "@/types";
+import type {
+  DreamerPlanRequestParams,
+  QuotationParams,
+  RequestParams,
+} from "@/types";
 
 export function buildMakerPlanQueryString({
   isAssigned = false,
@@ -50,6 +54,19 @@ export function buildQuotationQueryString({
   const params = [] as string[];
 
   if (planId) params.push(`planId=${planId}`);
+  params.push(`page=${page}`);
+  params.push(`pageSize=${pageSize}`);
+  return params.length > 0 ? `?${params.join("&")}` : "";
+}
+
+export function buildQuotationListQueryString({
+  isSent,
+  page,
+  pageSize,
+}: QuotationParams) {
+  const params = [] as string[];
+
+  if (typeof isSent === "boolean") params.push(`isSent=${isSent}`);
   params.push(`page=${page}`);
   params.push(`pageSize=${pageSize}`);
   return params.length > 0 ? `?${params.join("&")}` : "";

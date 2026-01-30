@@ -12,6 +12,7 @@ import {
 import {
   buildDreamerPlanQueryString,
   buildMakerPlanQueryString,
+  buildQuotationListQueryString,
   buildQuotationQueryString,
 } from "@/lib/query-builder";
 
@@ -102,9 +103,14 @@ export async function getDreamerPlanPosts({
   }
 }
 
-export async function getQuotationsByPlanId({planId, page = 1, pageSize = 5}: QuotationParams): Promise<QuotationResponse> {
+
+export async function getQuotationsByPlanId({
+  planId,
+  page = 1,
+  pageSize = 5,
+}: QuotationParams): Promise<QuotationResponse> {
   try {
-    const queryString = buildQuotationQueryString({planId, page, pageSize});
+    const queryString = buildQuotationQueryString({ planId, page, pageSize });
     return await fetchWithAuth(`${API}/plans/${planId}/quotes${queryString}`, {
       credentials: "include",
     });

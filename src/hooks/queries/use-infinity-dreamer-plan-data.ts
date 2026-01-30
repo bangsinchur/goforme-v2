@@ -26,6 +26,7 @@ export default function useInfinityDreamerPlanData({
         page: currentPage,
         pageSize: PAGE_SIZE,
       });
+
       planPosts.list.forEach((planPost: DreamerPlan) => {
         queryClient.setQueryData(QUERY_KEYS.plan.byId(planPost.id), planPost);
       });

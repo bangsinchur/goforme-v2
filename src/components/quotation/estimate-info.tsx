@@ -1,15 +1,28 @@
+"use client";
+
 import Image from "next/image";
 import defaultAvatar from "@/assets/icon_default.svg";
 import { quoteInfo } from "@/types";
 import { Button } from "../ui/button";
+import { useQuotationByIdData } from "@/hooks/queries/use-quotation-by-id-data";
+import Loader from "../ui/loader";
+import Fallback from "../ui/fallback";
 
 interface EstimateInfoProps {
-  quoteInfo: quoteInfo;
+  planId: string;
 }
 
-export default function EstimateInfo({ quoteInfo }: EstimateInfoProps) {
-  const { maker, price } = quoteInfo;
+export default function EstimateInfo({ planId }: { planId: string }) {
+  const { data: quoteData, error, isPending } = useQuotationByIdData(planId);
 
+  // if (isPending) return <Loader />;
+  // if (error) return <Fallback error={error} />;
+
+  // if (quoteData === null || quoteData === undefined) {
+  //   return (
+  //     <div className="text-sm text-muted-foreground">견적 내역이 없습니다.</div>
+  //   );
+  // }
   return (
     <div className="flex flex-col gap-2 bg-chart-3 rounded-md w-70 p-4 text-background">
       <div className="flex flex-col border rounded-md p-2">
@@ -20,7 +33,7 @@ export default function EstimateInfo({ quoteInfo }: EstimateInfoProps) {
             width={35}
             height={35}
           />
-          <div>{maker.nickName}</div>
+          {/* <div>{maker.nickName}</div> */}
         </div>
         <div className="flex items-center gap-2">
           <div className="text-sm">🌟평가 준비중</div>
@@ -32,7 +45,7 @@ export default function EstimateInfo({ quoteInfo }: EstimateInfoProps) {
             견적금액
           </div>
           <div className="text-sm font-bold">
-            {price.toLocaleString("ko-KR")}원
+            {/* {price.toLocaleString("ko-KR")}원 */}
           </div>
         </div>
         <Button variant="secondary" className="w-full mt-2 cursor-pointer">

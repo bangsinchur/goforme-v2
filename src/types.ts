@@ -7,10 +7,13 @@ export type UseMutationCallback = {
 
 export interface User {
   id: string;
-  role: "DREAMER" | "MAKER";
+  role: "MAKER" | "DREAMER";
   nickName: string;
+  email: string;
+  phoneNumber: string;
   coconut: number;
 }
+
 
 type TripType = "CULTURE" | "SHOPPING" | "FESTIVAL" | "ACTIVITY" | "FOOD_TOUR";
 
@@ -171,6 +174,7 @@ export interface QuotationDetail {
   price: number;
   content: string;
   maker: MakerInfo;
+  plan?: DreamerPlan;
   isConfirmed: false;
   isAssigned: false;
 }
@@ -180,8 +184,21 @@ export interface QuotationResponse {
   list: QuotationDetail[];
 }
 
+
 export interface QuotationParams {
-  planId?: string;
+  isSent?: boolean;
   page?: number;
   pageSize?: number;
+  planId?: string;
 }
+
+export interface QuotationItem extends PlanItem {
+  id: string;
+  price: number;
+  content: string;
+  plan: PlanItem;
+  maker: User;
+  isConfirmed: boolean;
+  isAssigned: boolean;
+}
+

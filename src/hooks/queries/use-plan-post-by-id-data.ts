@@ -7,6 +7,6 @@ export function usePlanPostByIdData(id: string) {
   return useQuery<PlanItem>({
     queryKey: QUERY_KEYS.plan.byId(id),
     queryFn: () => fetchPlanPostById(id),
-    enabled: false, // id가 있을 때만 실행
+    enabled: !!id,
   });
 }

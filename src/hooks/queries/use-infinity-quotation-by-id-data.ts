@@ -1,16 +1,13 @@
 import { getQuotationsByPlanId } from "@/api/plan-post";
 import { QUERY_KEYS } from "@/lib/constants";
 import { QuotationDetail } from "@/types";
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+
+const PAGE_SIZE = 5;
 
 export function useInfinityQuotationByIdData(planId: string) {
-  const queryClient = useQueryClient();
-
   return useInfiniteQuery({
+    // 각 planId별로 quotation 데이터 캐시 저장
     queryKey: QUERY_KEYS.quotation.byId(planId),
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
@@ -18,22 +15,13 @@ export function useInfinityQuotationByIdData(planId: string) {
       const quotations = await getQuotationsByPlanId({
         planId,
         page: currentPage,
-        pageSize: 5,
+        pageSize: PAGE_SIZE,
       });
-
-      // 각 견적을 캐시에 정규화해서 저장 (재사용 가능)
-      quotations.list.forEach((quotation: QuotationDetail) => {
-        queryClient.setQueryData(
-          QUERY_KEYS.quotation.detail(quotation.id),
-          quotation
-        );
-      });
-
-      // ID만 반환 (데이터 정규화 패턴)
-      return quotations.list.map((quotation: QuotationDetail) => quotation.id);
+     
+      return quotations.list;
     },
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length < 5) {
+      if (lastPage.length < PAGE_SIZE) {
         return undefined;
       }
       return allPages.length + 1;
