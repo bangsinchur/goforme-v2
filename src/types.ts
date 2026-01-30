@@ -175,8 +175,8 @@ export interface QuotationDetail {
   content: string;
   maker: MakerInfo;
   plan?: DreamerPlan;
-  isConfirmed: false;
-  isAssigned: false;
+  isConfirmed: boolean;
+  isAssigned: boolean;
 }
 
 export interface QuotationResponse {

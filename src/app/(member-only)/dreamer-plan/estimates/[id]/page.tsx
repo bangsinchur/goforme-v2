@@ -1,6 +1,11 @@
+
 import EstimateInfo from "@/components/quotation/estimate-info";
 import PlanInfo from "@/components/quotation/plan-info";
 import { Button } from "@/components/ui/button";
+import Fallback from "@/components/ui/fallback";
+import Loader from "@/components/ui/loader";
+import { useInfinityQuotationByIdData } from "@/hooks/queries/use-infinity-quotation-by-id-data";
+import { usePlanPostByIdData } from "@/hooks/queries/use-plan-post-by-id-data";
 import Link from "next/link";
 
 export default async function EstimatePage({
@@ -9,6 +14,7 @@ export default async function EstimatePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -19,11 +25,11 @@ export default async function EstimatePage({
       </div>
 
       <PlanInfo planId={id} />
-<div className="flex flex-col mt-5">
-    <div className="font-bold text-lg mb-2">플랜 견적 내역</div>
-    <EstimateInfo planId={id} />
-</div>
-      
+      <div className="flex flex-col mt-5">
+        <div className="font-bold my-5 text-xl">플랜 견적 내역</div>
+
+        <EstimateInfo planId={id} />
+      </div>
     </div>
   );
 }

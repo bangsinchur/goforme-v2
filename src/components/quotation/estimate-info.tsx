@@ -1,57 +1,34 @@
 "use client";
 
-import Image from "next/image";
-import defaultAvatar from "@/assets/icon_default.svg";
-import { quoteInfo } from "@/types";
-import { Button } from "../ui/button";
-import { useQuotationByIdData } from "@/hooks/queries/use-quotation-by-id-data";
 import Loader from "../ui/loader";
 import Fallback from "../ui/fallback";
-
-interface EstimateInfoProps {
-  planId: string;
-}
+import { useInfinityQuotationByIdData } from "@/hooks/queries/use-infinity-quotation-by-id-data";
+import EstimateInfoItem from "./estimate-info-item";
 
 export default function EstimateInfo({ planId }: { planId: string }) {
-  const { data: quoteData, error, isPending } = useQuotationByIdData(planId);
+  const {
+    data: quoteData,
+    error,
+    isPending,
+  } = useInfinityQuotationByIdData(planId);
 
-  // if (isPending) return <Loader />;
-  // if (error) return <Fallback error={error} />;
+  if (isPending) return <Loader />;
+  if (error) return <Fallback error={error} />;
 
-  // if (quoteData === null || quoteData === undefined) {
-  //   return (
-  //     <div className="text-sm text-muted-foreground">견적 내역이 없습니다.</div>
-  //   );
-  // }
+  const quoteDataList = quoteData.pages.flatMap((page) => page);
+
+  if (!quoteDataList.length)
+    return (
+      <div className="text-center text-sm text-foreground">
+        견적 내역이 없습니다.
+      </div>
+    );
+
   return (
-    <div className="flex flex-col gap-2 bg-chart-3 rounded-md w-70 p-4 text-background">
-      <div className="flex flex-col border rounded-md p-2">
-        <div className="flex items-center gap-2">
-          <Image
-            src={defaultAvatar}
-            alt="메이커 프로필 이미지"
-            width={35}
-            height={35}
-          />
-          {/* <div>{maker.nickName}</div> */}
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-sm">🌟평가 준비중</div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-4 items-center">
-          <div className="bg-muted text-sm text-foreground text-center min-w-16 rounded-md p-1">
-            견적금액
-          </div>
-          <div className="text-sm font-bold">
-            {/* {price.toLocaleString("ko-KR")}원 */}
-          </div>
-        </div>
-        <Button variant="secondary" className="w-full mt-2 cursor-pointer">
-          견적 상세보기
-        </Button>
-      </div>
+    <div className="flex flex-col gap-4">
+      {quoteDataList.map((quote) => (
+        <EstimateInfoItem key={quote.id} {...quote} />
+      ))}
     </div>
   );
 }
