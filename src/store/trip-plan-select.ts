@@ -7,17 +7,15 @@ type State = {
   gallery?: string;
   description?: string;
   detailDescription?: string;
-}
-
+};
 
 const initialState: State = {
-  selectedLocation: [] ,
-  selectedService: [] ,
+  selectedLocation: [],
+  selectedService: [],
   gallery: "",
   description: "",
   detailDescription: "",
-
-}
+};
 
 const useTripPlanSelectStore = create(
   devtools(
@@ -26,8 +24,7 @@ const useTripPlanSelectStore = create(
         set({ selectedLocation: Location }),
       setSelectedService: (Service: string[]) =>
         set({ selectedService: Service }),
-      setGallery: (Gallery: string) =>
-        set({ gallery: Gallery }),
+      setGallery: (Gallery: string) => set({ gallery: Gallery }),
       setDescription: (Description: string) =>
         set({ description: Description }),
       setDetailDescription: (DetailDescription: string) =>

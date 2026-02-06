@@ -11,8 +11,6 @@ const PAGE_SIZE = 5;
 
 export default function useInfinityDreamerPlanData({
   status,
-  page,
-  pageSize,
 }: DreamerPlanRequestParams) {
   const queryClient = useQueryClient();
 

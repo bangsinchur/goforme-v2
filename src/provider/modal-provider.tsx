@@ -16,8 +16,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
 
   if (!mount) return <>{children}</>;
 
-  // modalType에 따라 렌더링할 모달 결정
-  const renderModal = () => {
+   const renderModal = () => {
     if (modalType === 'IMAGE_SELECT') return <ImageSelectModal />;
     if (modalType === 'ESTIMATE') return <EstimateModal />;
     return null;
