@@ -76,9 +76,9 @@
 - **Language**: TypeScript
 - **Data Fetching / Caching**: React Query
 - **State Management**: Zustand
-- **Styling**: (실제 사용한 스타일링 방식 적기: 예) Tailwind CSS, CSS Modules 등)
+- **Styling**:  Tailwind CSS
 - **Auth**: JWT 기반 토큰, 자동 토큰 갱신
-- **Build / Deploy**: (사용했다면) Vercel
+
 
 ---
 
